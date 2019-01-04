@@ -1,0 +1,72 @@
+%----------------------------------------------------------------------------------------
+%	PACKAGES AND OTHER DOCUMENT CONFIGURATIONS
+%----------------------------------------------------------------------------------------
+
+\documentclass[10pt,a4paper,sans]{bulletcv}
+
+% Load stylesheet 'bulletcvstyle.sty'
+\usepackage{bulletcvstyle}
+\geometry{scale=0.75, top=1.5cm, bottom=1.5cm}
+
+\title{BulletCV Template}
+
+% Header and footer
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyfoot[CO,C]{\today}
+
+\usepackage{selinput}
+\SelectInputMappings{%
+  adieresis={ä},
+  eacute={é},
+  Lcaron={Ľ},
+}
+
+%----------------------------------------------------------------------------------------
+%	NAME AND CONTACT INFORMATION SECTION
+%----------------------------------------------------------------------------------------
+
+\firstname{Jane} % Your first name
+\familyname{Doe} % Your last name
+
+% All information in this block is optional, comment out any lines you don't need
+\address{123 Main Street}{Amsterdam, the Netherlands}
+%\mobile{3434}
+\phone{+31(0) 6 12 345 678}
+\dateofbirth{1 January 1990}
+\email{jane.doe@example.com}
+
+\begin{document}
+
+% Print CV header
+\makecvtitle
+
+%----------------------------------------------------------------------------------------
+%	EDUCATION SECTION
+%----------------------------------------------------------------------------------------
+\section{Education}
+\cventry{year--year}{Degree}{Institution}{Description}{}{}{}{} 
+\cventry{year--year}{Degree}{Institution}{Description}{Average grade}{}{}{}
+
+%----------------------------------------------------------------------------------------
+%	PROFESSIONAL EXPERIENCE SECTION
+%----------------------------------------------------------------------------------------
+\section{Professional Experience}
+\cventry{year--year}{Job title}{Company}{Description}{}{}{}{} 
+\cventry{year--year}{Job title}{Company}{Description}{Achievements}{Other relevant information}{}{} 
+
+%----------------------------------------------------------------------------------------
+%	EXTRACURRICULAR ACTIVITIES SECTION
+%----------------------------------------------------------------------------------------
+\section{Volunteer Experience}
+\cventry{year--year}{Title}{Organisation}{Description}{}{}{}{} 
+\cventry{year--year}{Title}{Organisation}{Description}{Achievements}{Other relevant information}{}{} 
+
+%----------------------------------------------------------------------------------------
+%	OTHER SECTION
+%----------------------------------------------------------------------------------------
+\section{}
+\cvitemwithcomment{Computer Skills}{Word, Powerpoint, HTML}{}
+\cvitemwithcomment{Languages}{English, Dutch, Norwegian}{}
+\cvitemwithcomment{Interests}{Diving, Travelling, Photography}{}
+\end{document}

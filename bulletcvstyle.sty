@@ -1,0 +1,220 @@
+%% start of file `bulletcvstyle.cls'.
+%%
+%% Adapted from `moderncv`, copyright 2006-2012 Xavier Danaux (xdanaux@gmail.com), found at https://ctan.org/pkg/moderncv
+
+%-------------------------------------------------------------------------------
+%                identification
+%-------------------------------------------------------------------------------
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{bulletcvstyle}[2019/01/04 v1.0.0 curriculum vitae styling]
+
+%-------------------------------------------------------------------------------
+%                commands
+%-------------------------------------------------------------
+
+% symbols
+\renewcommand*{\mobilesymbol}{\marvosymbol{72}~}
+\renewcommand*{\phonesymbol}{\marvosymbol{84}~}
+\renewcommand*{\faxsymbol}{\marvosymbol{117}~}
+\renewcommand*{\emailsymbol}{\marvosymbol{66}~}
+\renewcommand*{\homepagesymbol}{{\Large\marvosymbol{205}}~}
+
+% commands
+\newcommand*{\maketitlesymbol}{%
+    {~~~{\rmfamily|}~~~}}% the \rmfamily is required to force Latin Modern fonts when using sans serif, as OMS/lmss/m/n is not defined and gets substituted by OMS/cmsy/m/n
+%   internal command to add an element to the footer
+%   it collects the elements in a temporary box, and checks when to flush the box
+\newsavebox{\maketitlebox}%
+\newsavebox{\maketitletempbox}%
+\newlength{\maketitlewidth}%
+\newlength{\maketitleboxwidth}%
+\newif\if@firstmaketitleelement\@firstmaketitleelementtrue%
+%   adds an element to the maketitle, separated by maketitlesymbol
+%   usage: \addtomaketitle[maketitlesymbol]{element}
+\newcommand*{\addtomaketitle}[2][\maketitlesymbol]{%
+  \if@firstmaketitleelement%
+    \savebox{\maketitletempbox}{\usebox{\maketitlebox}#2}%
+  \else%
+    \savebox{\maketitletempbox}{\usebox{\maketitlebox}#1#2}\fi%
+  \settowidth{\maketitleboxwidth}{\usebox{\maketitletempbox}}%
+  \ifnum\maketitleboxwidth<\maketitlewidth%
+    \savebox{\maketitlebox}{\usebox{\maketitletempbox}}%
+    \@firstmaketitleelementfalse%
+  \else%
+    \flushmaketitle{}\\%
+    \savebox{\maketitlebox}{#2}%
+    \savebox{\maketitletempbox}{#2}%
+    \settowidth{\maketitleboxwidth}{\usebox{\maketitlebox}}%
+    \@firstmaketitleelementfalse\fi}
+%   internal command to flush the maketitle
+\newcommand*{\flushmaketitle}{%
+  \strut\usebox{\maketitlebox}%
+  \savebox{\maketitlebox}{}%
+  \savebox{\maketitletempbox}{}%
+  \setlength{\maketitleboxwidth}{0pt}}
+\newcommand*{\maketitle}{%
+  \setlength{\maketitlewidth}{0.8\textwidth}%
+  \hfil%
+  \parbox{\maketitlewidth}{%
+    \centering%
+    % name and title
+    \namestyle{\@firstname~\@familyname}\\%
+    % detailed information
+    \color{color2}\ifthenelse{\isundefined{\@dateofbirth}}{}{\addtomaketitle{\@dateofbirth}}%
+    \addressfont\color{color2}%
+    \ifthenelse{\isundefined{\@addressstreet}}{}{\addtomaketitle{\addresssymbol\@addressstreet}%
+      \ifthenelse{\equal{\@addresscity}{}}{}{\addtomaketitle[~--~]{\@addresscity}}\flushmaketitle\@firstmaketitleelementtrue\\}% if 
+    \ifthenelse{\isundefined{\@mobile}}{}{\addtomaketitle{\mobilesymbol\@mobile}}%
+    \ifthenelse{\isundefined{\@phone}}{}{\addtomaketitle{\phonesymbol\@phone}}%
+    \ifthenelse{\isundefined{\@fax}}{}{\addtomaketitle{\faxsymbol\@fax}}%
+    \ifthenelse{\isundefined{\@email}}{}{\addtomaketitle{\emailsymbol\emaillink{\@email}}}%
+        \ifthenelse{\isundefined{\@homepage}}{}{%
+	\ifthenelse{\equal{\@homepagetitle}{}}% \homepagetitle could be empty
+	{\addtomaketitle{\homepagesymbol\httplink{\@homepage}}}%
+	{\addtomaketitle{\homepagesymbol\httplink[\@homepagetitle]{\@homepage}}}}%
+    \ifthenelse{\isundefined{\@extrainfo}}{}{\addtomaketitle{\@extrainfo}}%
+    \flushmaketitle}%\\[2.5em]
+    }% need to force a \par after this to avoid weird spacing bug at the first section if no blank line is left after \maketitle
+
+% fonts
+\renewcommand*{\namefont}{\LARGE\bfseries\upshape}
+\renewcommand*{\titlefont}{\Huge\mdseries\upshape}
+\renewcommand*{\addressfont}{\normalsize\mdseries\upshape}
+\renewcommand*{\quotefont}{\large\slshape}
+\renewcommand*{\sectionfont}{\large\bfseries\upshape}
+\renewcommand*{\subsectionfont}{\large\upshape\fontseries{sb}\selectfont}
+\renewcommand*{\hintfont}{\bfseries}
+
+% styles
+\renewcommand*{\namestyle}[1]{{\namefont\textcolor{color1}{#1}}}
+\renewcommand*{\titlestyle}[1]{{\titlefont\textcolor{color2!85}{#1}}}
+\renewcommand*{\addressstyle}[1]{{\addressfont\textcolor{color1}{#1}}}
+\renewcommand*{\quotestyle}[1]{{\quotefont\textcolor{color1}{#1}}}
+\renewcommand*{\sectionstyle}[1]{{\sectionfont\textcolor{color1}{#1}}}
+\renewcommand*{\subsectionstyle}[1]{{\subsectionfont\textcolor{color1}{#1}}}
+\renewcommand*{\hintstyle}[1]{{\hintfont\textcolor{color0}{#1}}}
+
+% lengths
+\newlength{\quotewidth}
+\newlength{\hintscolumnwidth}
+\setlength{\hintscolumnwidth}{0.3\textwidth}%
+\newlength{\separatorcolumnwidth}
+\setlength{\separatorcolumnwidth}{0.025\textwidth}%
+\newlength{\maincolumnwidth}
+\newlength{\doubleitemcolumnwidth}
+\newlength{\listitemsymbolwidth}
+\settowidth{\listitemsymbolwidth}{\listitemsymbol}
+\newlength{\listitemmaincolumnwidth}
+\newlength{\listdoubleitemmaincolumnwidth}
+
+% commands
+\renewcommand*{\recomputecvlengths}{%
+  \setlength{\quotewidth}{0.65\textwidth}%
+  % main lenghts
+  \setlength{\maincolumnwidth}{0.75\textwidth}%
+  % listitem lengths
+  \setlength{\listitemmaincolumnwidth}{\maincolumnwidth-\listitemsymbolwidth}%
+  % doubleitem lengths
+  \setlength{\doubleitemcolumnwidth}{\maincolumnwidth-\separatorcolumnwidth}%
+  \setlength{\doubleitemcolumnwidth}{0.5\doubleitemcolumnwidth}%
+  % listdoubleitem lengths
+  \setlength{\listdoubleitemmaincolumnwidth}{\maincolumnwidth-\listitemsymbolwidth-\separatorcolumnwidth-\listitemsymbolwidth}%
+  \setlength{\listdoubleitemmaincolumnwidth}{0.5\listdoubleitemmaincolumnwidth}%
+  % fancyhdr lengths
+  \renewcommand{\headwidth}{\textwidth}%
+  % regular lengths
+  \setlength{\parskip}{0\p@}}
+
+\renewcommand*{\section}[1]{%
+  \par\addvspace{2.5ex}%
+  \phantomsection{}% reset the anchor for hyperrefs
+  \addcontentsline{toc}{section}{#1}%
+  \strut\sectionstyle{#1}%
+  {\color{color1}\hrule}%
+  \par\nobreak\addvspace{1ex}\@afterheading}
+
+\newcommand{\subsectionfill}{\xleaders\hbox to 0.35em{\scriptsize.}\hfill}% different subsectionfills will not be perfectly aligned, but remaining space at the end of the fill will be distributed evenly between leaders, so it will be barely visible
+\renewcommand*{\subsection}[1]{%
+  \par\addvspace{1ex}%
+  \phantomsection{}%
+  \addcontentsline{toc}{subsection}{#1}%
+  \strut\subsectionstyle{#1}{\color{color1}{\subsectionfill}}%
+  \par\nobreak\addvspace{0.5ex}\@afterheading}
+
+\renewcommand*{\cvitem}[3][.25em]{%
+  \begin{tabular}{@{}p{\hintscolumnwidth}@{\hspace{\separatorcolumnwidth}}p{\maincolumnwidth}@{}}%
+ 	  #2 &{#3}%
+  \end{tabular}%
+  \par\addvspace{#1}}
+
+\renewcommand*{\cvdoubleitem}[5][.25em]{%
+ \cvitem[#1]{#2}{%
+   \begin{minipage}[t]{\doubleitemmaincolumnwidth}#3\end{minipage}%
+   \hfill% fill of \separatorcolumnwidth
+   \begin{minipage}[t]{\hintscolumnwidth}\raggedleft\hintstyle{#4}\end{minipage}%
+   \hspace*{\separatorcolumnwidth}%
+   \begin{minipage}[t]{\doubleitemmaincolumnwidth}#5\end{minipage}}}
+
+\renewcommand*{\cvlistitem}[2][.25em]{%
+  \cvitem[#1]{}{\listitemsymbol\begin{minipage}[t]{\listitemmaincolumnwidth}#2\end{minipage}}}
+
+\renewcommand*{\cvlistdoubleitem}[3][.25em]{%
+  \cvitem[#1]{}{\listitemsymbol\begin{minipage}[t]{\listdoubleitemmaincolumnwidth}#2\end{minipage}%
+  \hfill% fill of \separatorcolumnwidth
+  \ifthenelse{\equal{#3}{}}%
+    {}%
+    {\listitemsymbol\begin{minipage}[t]{\listdoubleitemmaincolumnwidth}#3\end{minipage}}}}
+
+\renewcommand*{\cventry}[9][.01em]{%
+  \cvitem[#1]{#2}{%
+    {\bfseries#3}\newline
+    \ifthenelse{\equal{#4}{}}{}{{\slshape#4}}
+    \begin{adjustwidth}{1cm}{0cm}
+    \ifthenelse{\equal{#5}{}}{}{\vspace{\itemspacing}\begin{itemize}\item #5\end{itemize}\vspace{\itemspacing}}
+    \ifthenelse{\equal{#6}{}}{}{\begin{itemize}\item #6\end{itemize}\vspace{\itemspacing}}
+    \ifthenelse{\equal{#7}{}}{}{\begin{itemize}\item #7\end{itemize}\vspace{\itemspacing}}
+    \ifthenelse{\equal{#8}{}}{}{\begin{itemize}\item #8\end{itemize}\vspace{\itemspacing}}
+    \ifthenelse{\equal{#9}{}}{}{\begin{itemize}\item #9\end{itemize}}
+    \end{adjustwidth}
+	%\begin{minipage}[t]{\linewidth}\end{minipage}
+    }}
+
+\newbox{\cvitemwithcommentmainbox}
+\newlength{\cvitemwithcommentmainlength}
+\newlength{\cvitemwithcommentcommentlength}
+\renewcommand*{\cvitemwithcomment}[4][.25em]{%
+  \savebox{\cvitemwithcommentmainbox}{\ifthenelse{\equal{#2}{}}{}{\hintstyle{#2}: }#3}%
+  \setlength{\cvitemwithcommentmainlength}{\widthof{\usebox{\cvitemwithcommentmainbox}}}%
+  \setlength{\cvitemwithcommentcommentlength}{\maincolumnwidth-\separatorcolumnwidth-\cvitemwithcommentmainlength}%
+  \begin{minipage}[t]{\cvitemwithcommentmainlength}\ifthenelse{\equal{#2}{}}{}{\hintstyle{#2}: }#3\end{minipage}%
+  \hfill% fill of \separatorcolumnwidth
+  \begin{minipage}[t]{\cvitemwithcommentcommentlength}\raggedleft\small\itshape#4\end{minipage}%
+  \par\addvspace{#1}}
+
+\renewenvironment{thebibliography}[1]%
+  {%
+    \bibliographyhead{\refname}%
+%    \small%
+    \begin{list}{\bibliographyitemlabel}%
+      {%
+        \setlength{\topsep}{0pt}%
+        \setlength{\labelwidth}{0pt}%
+        \setlength{\labelsep}{0pt}%
+        \leftmargin\labelwidth%
+        \advance\leftmargin\labelsep%
+        \@openbib@code%
+        \usecounter{enumiv}%
+        \let\p@enumiv\@empty%
+        \renewcommand\theenumiv{\@arabic\c@enumiv}}%
+        \sloppy\clubpenalty4000\widowpenalty4000%
+%        \sfcode`\.\@m%
+%        \sfcode `\=1000\relax%
+  }%
+  {%
+    \def\@noitemerr{\@latex@warning{Empty `thebibliography' environment}}%
+    \end{list}%
+  }
+ 
+
+
+%% end of file `bulletcvstyle.sty'.

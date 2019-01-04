@@ -1,2 +1,2 @@
-# BulletCV
-Opinionated CV template using bulletpoints
+# BulletCV - Opinionated CV template
+
